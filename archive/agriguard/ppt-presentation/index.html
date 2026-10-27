@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rayalaseema Green Industrial Grid (RGIG) - Samarth Foundation Proposal</title>
+  <meta name="description" content="Rayalaseema Green Industrial Grid (RGIG) Competition Pitch Deck for Samarth Foundation Call for Ideas.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-theme="theme-glass">
+
+  <!-- Top App Header Bar -->
+  <header class="app-header">
+    <div class="brand-section">
+      <div class="brand-icon">🌱</div>
+      <div class="brand-title">RGIG | Samarth Foundation Pitch</div>
+    </div>
+
+    <div class="header-actions">
+      <!-- Theme Switcher -->
+      <select id="theme-select" class="btn-icon" style="padding-right: 1.5rem;">
+        <option value="theme-glass">💎 Glassmorphism Dark</option>
+        <option value="theme-executive">🌌 Executive Slate</option>
+        <option value="theme-cyber">⚡ Cyberpunk Neon</option>
+        <option value="theme-emerald">🌿 Emerald Tech</option>
+        <option value="theme-minimal">☀️ Minimal Light</option>
+      </select>
+
+      <button id="btn-grid" class="btn-icon" title="Slide Overview Grid (G)">
+        <span>🪟</span> Overview <span class="kbd-hint">G</span>
+      </button>
+
+      <button id="btn-laser" class="btn-icon" title="Laser Pointer Tool (L)">
+        <span>🎯</span> Laser <span class="kbd-hint">L</span>
+      </button>
+
+      <button id="btn-presenter" class="btn-icon" title="Presenter Notes View (P)">
+        <span>📝</span> Speaker Notes <span class="kbd-hint">P</span>
+      </button>
+
+      <button id="btn-fullscreen" class="btn-icon" title="Fullscreen Mode (F)">
+        <span>⤢</span> Fullscreen <span class="kbd-hint">F</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Presentation Stage Viewport -->
+  <main class="presentation-viewport">
+    <div id="slide-stage" class="slide-stage">
+      <!-- Laser Pointer Cursor Overlay -->
+      <div id="laser-pointer"></div>
+
+      <!-- Rendered Dynamic Slide Content -->
+      <div id="slide-content-wrapper" class="slide-content-wrapper">
+        <!-- Rendered via JS -->
+      </div>
+
+      <!-- Slide Progress Bar -->
+      <div class="progress-bar-container">
+        <div id="progress-bar-fill" class="progress-bar-fill"></div>
+      </div>
+    </div>
+
+    <!-- Floating Navigation Controls -->
+    <div class="bottom-controls">
+      <button id="btn-prev" class="btn-icon" title="Previous Slide (Left Arrow)">
+        <span>←</span> Prev
+      </button>
+      
+      <span id="slide-counter" class="slide-counter">1 / 6</span>
+
+      <button id="btn-next" class="btn-icon active" title="Next Slide (Right Arrow or Space)">
+        Next <span>→</span>
+      </button>
+    </div>
+
+    <!-- Collapsible Presenter Notes Panel -->
+    <div id="presenter-panel" class="presenter-panel">
+      <div class="panel-header">
+        <span>Speaker Notes</span>
+        <span class="kbd-hint">P to toggle</span>
+      </div>
+      <p id="notes-text" class="notes-text">
+        Welcome to the presentation!
+      </p>
+    </div>
+  </main>
+
+  <!-- Slide Overview Grid Sorter Modal -->
+  <div id="grid-modal" class="modal-overlay">
+    <div class="grid-modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Slide Overview Sorter</h2>
+        <button id="btn-close-grid" class="btn-icon">Close ✕</button>
+      </div>
+      <div id="slide-grid-sorter" class="slide-grid-sorter">
+        <!-- Thumbnails populated dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="slides-data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

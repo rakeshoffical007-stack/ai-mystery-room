@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriGuard AI - Smart Crop Health & Disease Advisory</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="notch"></div>
+        <div class="app-container">
+            <!-- Header -->
+            <header class="app-header">
+                <div class="logo">
+                    <i class="fa-solid fa-leaf"></i> AgriGuard <span>AI</span>
+                </div>
+                <div class="profile-pic" id="profile-btn" title="Profile & Farm Settings">
+                    <i class="fa-solid fa-user-gear"></i>
+                </div>
+            </header>
+
+            <!-- Main Content Area -->
+            <main class="content-area">
+                
+                <!-- Home Tab -->
+                <section id="tab-home" class="tab-content active">
+                    <div class="pull-to-refresh">
+                        <i class="fa-solid fa-arrow-rotate-right"></i> Dynamic Farm Advisory
+                    </div>
+                    
+                    <div class="hero-card">
+                        <div class="hero-content">
+                            <h2>Protect Your Crops</h2>
+                            <p>AI-powered disease detection & agronomist advisory in seconds</p>
+                            <div class="hero-actions">
+                                <button class="primary-btn hero-scan-btn" onclick="switchTab('tab-scan')">
+                                    <i class="fa-solid fa-camera"></i> Scan Now
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Stats Widget -->
+                    <div class="stats-grid">
+                        <div class="stat-card glass-card">
+                            <div class="stat-icon primary"><i class="fa-solid fa-microchip"></i></div>
+                            <div class="stat-info">
+                                <span class="stat-value" id="stat-total-scans">0</span>
+                                <span class="stat-label">Total Scans</span>
+                            </div>
+                        </div>
+                        <div class="stat-card glass-card">
+                            <div class="stat-icon healthy"><i class="fa-solid fa-shield-heart"></i></div>
+                            <div class="stat-info">
+                                <span class="stat-value" id="stat-healthy-rate">0%</span>
+                                <span class="stat-label">Healthy Rate</span>
+                            </div>
+                        </div>
+                        <div class="stat-card glass-card">
+                            <div class="stat-icon critical"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                            <div class="stat-info">
+                                <span class="stat-value" id="stat-risk-alerts">0</span>
+                                <span class="stat-label">Risk Alerts</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Interactive Weather & Disease Risk Card -->
+                    <div class="weather-risk-card glass-card">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-cloud-sun-rain"></i> Environmental Risk Radar</h3>
+                            <select id="weather-sim-select" class="weather-select">
+                                <option value="humidity">High Humidity Mode</option>
+                                <option value="rain">Heavy Rainfall Mode</option>
+                                <option value="dry">Dry & Hot Mode</option>
+                            </select>
+                        </div>
+                        <div id="weather-risk-body">
+                            <div class="risk-badge-wrapper">
+                                <span class="badge warning" id="weather-risk-badge">High Fungal Risk</span>
+                            </div>
+                            <p id="weather-risk-desc">High relative humidity (>85%) detected. Fungal spores of Phytophthora and Alternaria pose immediate risk to Solanaceous crops (Tomatoes & Potatoes).</p>
+                        </div>
+                    </div>
+
+                    <div class="section-title">
+                        <h3>Recent Scans</h3>
+                        <a href="#" onclick="switchTab('tab-history')">See all</a>
+                    </div>
+                    
+                    <div class="recent-scans-list" id="home-recent-scans">
+                        <!-- Dynamically rendered by JS -->
+                    </div>
+                </section>
+
+                <!-- Scan Tab -->
+                <section id="tab-scan" class="tab-content">
+                    <div class="scan-container">
+                        <h2>New Leaf Scan</h2>
+                        <p class="subtitle">Select your crop type and snap or upload a leaf photo</p>
+                        
+                        <!-- Crop Type Selector -->
+                        <div class="crop-select-wrapper glass-card">
+                            <label for="crop-selector"><i class="fa-solid fa-wheat-awn"></i> Target Crop Type:</label>
+                            <select id="crop-selector" class="crop-dropdown">
+                                <option value="auto">✨ Auto Detect Crop</option>
+                                <option value="Tomato">🍅 Tomato</option>
+                                <option value="Potato">🥔 Potato</option>
+                                <option value="Corn">🌽 Corn</option>
+                                <option value="Wheat">🌾 Wheat</option>
+                                <option value="Rice">🍚 Rice</option>
+                                <option value="Apple">🍎 Apple</option>
+                                <option value="Grape">🍇 Grape</option>
+                            </select>
+                        </div>
+
+                        <div class="upload-area" id="upload-area">
+                            <input type="file" id="file-input" accept="image/*" hidden>
+                            <div class="upload-placeholder" id="upload-placeholder">
+                                <i class="fa-solid fa-cloud-arrow-up"></i>
+                                <h3>Tap to upload leaf photo</h3>
+                                <p>or drag & drop image here</p>
+                                <div class="or-divider"><span>OR</span></div>
+                                <button type="button" class="secondary-btn camera-launch-btn" id="start-camera-btn">
+                                    <i class="fa-solid fa-video"></i> Live Camera Scan
+                                </button>
+                            </div>
+                            <div class="preview-container hidden" id="preview-container">
+                                <img id="image-preview" src="" alt="Preview">
+                                <div class="scanning-beam"></div>
+                            </div>
+                        </div>
+
+                        <div class="scan-actions">
+                            <button class="secondary-btn" id="reselect-btn" disabled>Retake</button>
+                            <button class="primary-btn" id="analyze-btn" disabled>
+                                <i class="fa-solid fa-microchip"></i> Analyze Image
+                            </button>
+                        </div>
+
+                        <!-- Camera Viewfinder Overlay -->
+                        <div class="camera-overlay hidden" id="camera-overlay">
+                            <div class="camera-header">
+                                <h3><i class="fa-solid fa-camera"></i> Live Viewfinder</h3>
+                                <button class="icon-btn" id="close-camera-btn"><i class="fa-solid fa-xmark"></i></button>
+                            </div>
+                            <div class="video-container">
+                                <video id="camera-feed" autoplay playsinline muted></video>
+                                <canvas id="camera-canvas" class="hidden"></canvas>
+                                <div class="target-reticle"></div>
+                            </div>
+                            <div class="camera-controls">
+                                <button class="capture-btn" id="capture-photo-btn">
+                                    <div class="inner-btn"></div>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- AI Analyzing Overlay -->
+                        <div class="analyzing-overlay hidden" id="analyzing-overlay">
+                            <div class="circular-progress">
+                                <div class="inner-circle"></div>
+                                <i class="fa-solid fa-brain"></i>
+                            </div>
+                            <h3>AI Deep Learning Diagnostic...</h3>
+                            <p id="analyzing-status">Scanning leaf cellular structures</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Result Modal (Overlay over scan tab) -->
+                <div class="result-modal hidden" id="result-modal">
+                    <div class="result-header">
+                        <button class="icon-btn back-btn" id="close-result-btn"><i class="fa-solid fa-arrow-left"></i></button>
+                        <h2>Diagnostic Report</h2>
+                        <button class="icon-btn" id="export-report-btn" title="Export PDF / Print Report"><i class="fa-solid fa-file-pdf"></i></button>
+                    </div>
+                    
+                    <div class="result-content">
+                        <div class="result-summary glass-card">
+                            <div class="result-image-thumb">
+                                <img id="result-thumb" src="" alt="Thumbnail">
+                            </div>
+                            <div class="result-title">
+                                <h3 id="result-disease">Late Blight</h3>
+                                <div class="tags">
+                                    <span class="badge crop-badge" id="result-crop">Potato</span>
+                                    <span class="badge confidence-badge" id="result-confidence">94% Confidence</span>
+                                </div>
+                            </div>
+                            <div class="severity-indicator" id="severity-indicator">
+                                <span class="badge critical">Critical</span>
+                            </div>
+                        </div>
+
+                        <div class="result-section">
+                            <h3><i class="fa-solid fa-virus"></i> Pathogen & Causes</h3>
+                            <div class="glass-card info-card" id="result-causes">
+                                <!-- Populated by JS -->
+                            </div>
+                        </div>
+
+                        <div class="result-section">
+                            <h3><i class="fa-solid fa-magnifying-glass"></i> Key Clinical Symptoms</h3>
+                            <div class="glass-card info-card">
+                                <ul class="symptoms-list" id="result-symptoms">
+                                    <!-- Populated by JS -->
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="result-section">
+                            <h3><i class="fa-solid fa-shield-halved"></i> Treatment Protocol</h3>
+                            
+                            <div class="precautions-tabs">
+                                <div class="p-tab active" data-target="organic">🌿 Organic & Bio</div>
+                                <div class="p-tab" data-target="chemical">💊 Chemical Control</div>
+                                <div class="p-tab" data-target="prevention">🛡️ Prevention & Care</div>
+                            </div>
+                            
+                            <div class="glass-card info-card precautions-content">
+                                <div id="p-organic" class="p-content active"></div>
+                                <div id="p-chemical" class="p-content hidden"></div>
+                                <div id="p-prevention" class="p-content hidden"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="result-actions">
+                            <button class="primary-btn full-width" id="save-result-btn"><i class="fa-solid fa-bookmark"></i> Save to Scan History</button>
+                            <button class="danger-btn full-width hidden" id="delete-result-btn" style="margin-top: 10px;"><i class="fa-solid fa-trash-can"></i> Delete from History</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Library Tab -->
+                <section id="tab-library" class="tab-content">
+                    <div class="library-header">
+                        <h2>Disease Encyclopedia</h2>
+                        <div class="search-bar">
+                            <i class="fa-solid fa-search"></i>
+                            <input type="text" id="library-search" placeholder="Search diseases or crops...">
+                        </div>
+                        
+                        <div class="filter-chips">
+                            <div class="chip active" data-filter="all">All Crops</div>
+                            <div class="chip" data-filter="tomato">Tomato</div>
+                            <div class="chip" data-filter="potato">Potato</div>
+                            <div class="chip" data-filter="corn">Corn</div>
+                            <div class="chip" data-filter="wheat">Wheat</div>
+                            <div class="chip" data-filter="rice">Rice</div>
+                            <div class="chip" data-filter="apple">Apple</div>
+                            <div class="chip" data-filter="grape">Grape</div>
+                        </div>
+                    </div>
+                    
+                    <div class="library-list" id="library-list">
+                        <!-- Populated by JS -->
+                    </div>
+                </section>
+
+                <!-- History Tab -->
+                <section id="tab-history" class="tab-content">
+                    <div class="history-header">
+                        <h2>Scan History</h2>
+                        <div class="history-controls">
+                            <select id="history-filter-select" class="history-select">
+                                <option value="all">All Scans</option>
+                                <option value="critical">Critical / High Risk</option>
+                                <option value="warning">Medium Risk</option>
+                                <option value="healthy">Healthy Only</option>
+                            </select>
+                            <button class="icon-btn danger-icon" id="clear-history-btn" title="Clear History"><i class="fa-solid fa-trash-arrow-up"></i></button>
+                        </div>
+                    </div>
+                    
+                    <div class="history-full-list" id="history-list">
+                        <!-- Populated by JS -->
+                        <div class="empty-state hidden" id="history-empty">
+                            <div class="empty-icon">📝</div>
+                            <h3>No scans found</h3>
+                            <p>Your scan diagnostic records will appear here.</p>
+                            <button class="secondary-btn" onclick="switchTab('tab-scan')">Start a New Scan</button>
+                        </div>
+                    </div>
+                </section>
+            </main>
+
+            <!-- Floating AI Agronomist Chatbot Trigger -->
+            <button class="chatbot-fab" id="chatbot-fab" title="Ask AI Agronomist Assistant">
+                <i class="fa-solid fa-robot"></i>
+                <span class="pulse-dot"></span>
+            </button>
+
+            <!-- AI Agronomist Chatbot Drawer -->
+            <div class="chatbot-modal hidden" id="chatbot-modal">
+                <div class="chat-header">
+                    <div class="chat-title">
+                        <i class="fa-solid fa-robot text-emerald"></i>
+                        <div>
+                            <h4>AgriGuard AI Agronomist</h4>
+                            <span class="online-status">Online • Crop Doctor</span>
+                        </div>
+                    </div>
+                    <button class="icon-btn" id="close-chat-btn"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div class="chat-messages" id="chat-messages">
+                    <div class="chat-bubble bot-message">
+                        Hello! I am your AI Agronomist. Ask me anything about crop diseases, organic treatments, soil nutrition, or pest control!
+                    </div>
+                </div>
+                <div class="chat-quick-prompts">
+                    <span class="prompt-chip" data-prompt="How do I prevent Tomato Early Blight organically?">🌿 Organic Early Blight care</span>
+                    <span class="prompt-chip" data-prompt="What fertilizer balance protects against Rice Blast?">🍚 Rice Blast prevention</span>
+                    <span class="prompt-chip" data-prompt="Best fungicide for Potato Late Blight?">💊 Late Blight fungicide</span>
+                </div>
+                <div class="chat-input-area">
+                    <input type="text" id="chat-input" placeholder="Type your farming question...">
+                    <button class="icon-btn primary-bg" id="send-chat-btn"><i class="fa-solid fa-paper-plane"></i></button>
+                </div>
+            </div>
+
+            <!-- Profile & Farm Settings Modal -->
+            <div class="profile-modal hidden" id="profile-modal">
+                <div class="profile-modal-card glass-card">
+                    <div class="modal-header">
+                        <h3><i class="fa-solid fa-user-gear"></i> Profile & Farm Settings</h3>
+                        <button class="icon-btn" id="close-profile-btn"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                    <div class="profile-form">
+                        <div class="form-group">
+                            <label for="farm-name"><i class="fa-solid fa-wheat-field"></i> Farm Name</label>
+                            <input type="text" id="farm-name" value="Green Acres Farm">
+                        </div>
+                        <div class="form-group">
+                            <label for="farm-location"><i class="fa-solid fa-location-dot"></i> Location & Climate Zone</label>
+                            <input type="text" id="farm-location" value="Midwest Region, Zone 6a">
+                        </div>
+                        <div class="form-group">
+                            <label for="primary-crop-setting"><i class="fa-solid fa-seedling"></i> Primary Crops</label>
+                            <input type="text" id="primary-crop-setting" value="Tomato, Potato, Corn">
+                        </div>
+                        <div class="form-group">
+                            <label for="temp-unit"><i class="fa-solid fa-temperature-half"></i> Temperature Unit</label>
+                            <select id="temp-unit" class="weather-select full-width">
+                                <option value="c">Celsius (°C)</option>
+                                <option value="f">Fahrenheit (°F)</option>
+                            </select>
+                        </div>
+                        <button class="primary-btn full-width" id="save-profile-btn"><i class="fa-solid fa-floppy-disk"></i> Save Preferences</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Navigation -->
+            <nav class="bottom-nav">
+                <div class="nav-item active" data-tab="tab-home">
+                    <i class="fa-solid fa-house"></i>
+                    <span>Home</span>
+                </div>
+                <div class="nav-item" data-tab="tab-scan">
+                    <div class="scan-fab">
+                        <i class="fa-solid fa-camera"></i>
+                    </div>
+                    <span>Scan</span>
+                </div>
+                <div class="nav-item" data-tab="tab-library">
+                    <i class="fa-solid fa-book"></i>
+                    <span>Library</span>
+                </div>
+                <div class="nav-item" data-tab="tab-history">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                    <span>History</span>
+                </div>
+            </nav>
+            
+            <!-- Toast Container -->
+            <div id="toast-container"></div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+{
+  "name": "ai-mystery-room",
+  "version": "1.0.0",
+  "description": "AI-powered web application where users create and solve mysteries generated using Gemini",
+  "scripts": {
+    "start": "node server/index.js",
+    "server": "npm --prefix server start",
+    "client": "npm --prefix client dev",
+    "build:client": "npm --prefix client run build",
+    "test:api": "node server/test-api.js"
+  },
+  "keywords": [
+    "ai",
+    "gemini",
+    "mystery-room",
+    "react",
+    "express",
+    "mongodb"
+  ],
+  "author": "",
+  "license": "MIT"
+}
